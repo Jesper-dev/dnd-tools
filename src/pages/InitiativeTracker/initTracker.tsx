@@ -3,28 +3,32 @@ import { Title } from "../../components/title/Title";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { List } from "immutable";
+import { Text } from "../../components/text/Text";
 
 import "./initTracker.less";
 
-interface IPlayer {
+export interface IPlayer {
     name: string;
     initNumber: number;
 }
 
 export const InitTracker = () => {
-    // const [player, setPlayer] = useState<IPlayer>({ name: "", initNumber: 0 });
+    const [calculatedPlayers, setCalculatedPlayers] = useState<List<IPlayer>>(
+        List()
+    );
     const [playerName, setPlayerName] = useState("");
     const [playerInit, setPlayerInit] = useState(0);
     const [players, setPlayers] = useState<List<IPlayer>>(List());
 
     const addPlayer = () => {
-        if (playerName === "" && !playerInit) return;
+        if (!playerName || !playerInit) return;
         setPlayerName("");
         setPlayerInit(0);
         let tempList = players.push({
             name: playerName,
             initNumber: playerInit,
         });
+        tempList = tempList.sortBy((x) => x.initNumber).reverse();
         setPlayers(tempList);
     };
 
@@ -52,25 +56,25 @@ export const InitTracker = () => {
                 <button onClick={addPlayer}>Add Player</button>
             </div>
             <div className="players_container">
-                {players.map((player, i) => {
-                    return (
-                        <div className="player_container" key={i}>
-                            <Title level="h3" title={player.name} />
-                            <Title
-                                level="h3"
-                                title={player.initNumber.toString()}
-                            />
-                            <FontAwesomeIcon
-                                onClick={() => onRemovePlayer(player.name)}
-                                icon={faXmark}
-                                className="close_icon"
-                            />
-                        </div>
-                    );
-                })}
-            </div>
-            <div>
-                <button>Calculate Initiatives</button>
+                <ol className="players_container_list">
+                    {players.map((player, i) => {
+                        return (
+                            <li key={i}>
+                                <div className="player_container">
+                                    <Text text={player.name} />
+                                    <Text text={player.initNumber.toString()} />
+                                    <FontAwesomeIcon
+                                        onClick={() =>
+                                            onRemovePlayer(player.name)
+                                        }
+                                        icon={faXmark}
+                                        className="close_icon"
+                                    />
+                                </div>
+                            </li>
+                        );
+                    })}
+                </ol>
             </div>
         </div>
     );
