@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Title } from "../../components/title/Title";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { List } from "immutable";
@@ -13,9 +12,6 @@ export interface IPlayer {
 }
 
 export const InitTracker = () => {
-    const [calculatedPlayers, setCalculatedPlayers] = useState<List<IPlayer>>(
-        List()
-    );
     const [playerName, setPlayerName] = useState("");
     const [playerInit, setPlayerInit] = useState(0);
     const [players, setPlayers] = useState<List<IPlayer>>(List());
@@ -45,6 +41,7 @@ export const InitTracker = () => {
                     id="name.input"
                     type="text"
                     value={playerName}
+                    placeholder="name here"
                     onChange={(e) => setPlayerName(e.target.value)}
                 />
                 <input
