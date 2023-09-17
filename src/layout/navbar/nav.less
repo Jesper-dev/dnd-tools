@@ -2,6 +2,13 @@ nav {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    border-bottom: 2px solid rgb(197, 197, 197);
+    margin-bottom: 20px;
+
+    @media screen and(max-width: 600px) {
+        justify-content: center;
+    }
+
     ul {
         width: 20%;
         display: flex;
@@ -9,6 +16,10 @@ nav {
         list-style: none;
         padding: 0;
         margin: 0;
+
+        @media screen and(max-width: 600px) {
+            width: 100%;
+        }
 
         li {
             font-size: 1.2rem;
