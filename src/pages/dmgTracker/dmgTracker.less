@@ -4,4 +4,43 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    
+    .add_monster_container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .monsters_container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 8px;
+        height: 200px;
+        overflow: auto;
+
+        .monsters_container_list {
+            width: 200px;
+
+            
+            .monster_container {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .close_icon {
+                color: rgb(201, 0, 0);
+                cursor: pointer;
+                
+                &:hover {
+                    color: rgb(97, 0, 0);
+                }
+            }
+        }
+    }
 }
