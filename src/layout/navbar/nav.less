@@ -9,26 +9,48 @@ nav {
         justify-content: center;
     }
 
-    ul {
-        width: 20%;
+    .container {
         display: flex;
-        justify-content: space-around;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-
+        justify-content: flex-end;
+        align-items: center;
+        width: 20%;
+        height: 50px;
         @media screen and(max-width: 600px) {
             width: 100%;
         }
-
-        li {
-            font-size: 1.2rem;
-            a {
-                text-decoration: none;
-                color: white;
+        .toggle_icon_container {
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        
+            .toggle_icon {
+                margin-right: 20px;
+            
                 &:hover {
-                    color: grey;
                     cursor: pointer;
+                    color: grey;
+                }
+            }
+        }
+    
+        ul {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        
+            li {
+                font-size: 1.2rem;
+                a {
+                    text-decoration: none;
+                    color: white;
+                    &:hover {
+                        color: grey;
+                        cursor: pointer;
+                    }
                 }
             }
         }
