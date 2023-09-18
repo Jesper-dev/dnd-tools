@@ -17,9 +17,6 @@ export interface IMonster {
 export const DmgTracker = () => {
     const [monsterName, setMonsterName] = useState("");
     const [monsterHealth, setMonsterHealth] = useState(0);
-    const [newMonsterHealth, setNewMonsterHealth] = useState(0);
-    const [editMode, setEditMode] = useState(false);
-
     const [monsters, setMonsters] = useState<List<IMonster>>(List());
 
     const addMonster = () => {
@@ -41,26 +38,7 @@ export const DmgTracker = () => {
         setMonsters(tempList);
     };
 
-    const switchHpElement = (health: number) => {
-        if (editMode) {
-            return (
-                <div className="edit_health_container">
-                    <Text text={"HP: "} />
-                    <input
-                        className="edit_health_input"
-                        type="number"
-                        value={newMonsterHealth}
-                        onChange={(e) =>
-                            setNewMonsterHealth(parseInt(e.target.value))
-                        }
-                    />
-                </div>
-            );
-        }
-        return <Text text={`HP: ${health.toString()}`} />;
-    };
-
-    const onSave = (name: string) => {
+    const onSave = (name: string, newMonsterHealth: number) => {
         const index = monsters.findIndex((monster) => monster.name === name);
         const monster = monsters.get(index);
         if (monster) {
@@ -71,26 +49,6 @@ export const DmgTracker = () => {
             let tempList = monsters.update(index, () => newMonster);
             setMonsters(tempList);
         }
-        setEditMode(false);
-    };
-
-    const editOrSaveIcon = (name: string) => {
-        if (editMode) {
-            return (
-                <FontAwesomeIcon
-                    onClick={() => onSave(name)}
-                    icon={faFloppyDisk}
-                    className="edit_icon"
-                />
-            );
-        }
-        return (
-            <FontAwesomeIcon
-                onClick={() => setEditMode(true)}
-                icon={faPenToSquare}
-                className="edit_icon"
-            />
-        );
     };
 
     return (
@@ -114,22 +72,81 @@ export const DmgTracker = () => {
             <div className="monsters_container">
                 {monsters.map((monster, i) => {
                     return (
-                        <div key={i} className="monster_container">
-                            <Text text={monster.name} />
-                            {switchHpElement(monster.health)}
-                            {editOrSaveIcon(monster.name)}
-                            <div className="remove_icon_container">
-                                <FontAwesomeIcon
-                                    onClick={() =>
-                                        onRemoveMonster(monster.name)
-                                    }
-                                    icon={faXmark}
-                                    className="remove_icon"
-                                />
-                            </div>
-                        </div>
+                        <MonsterCard
+                            key={i}
+                            onSave={onSave}
+                            onRemoveMonster={onRemoveMonster}
+                            monster={monster}
+                        />
                     );
                 })}
+            </div>
+        </div>
+    );
+};
+
+interface IMonsterCard {
+    onSave: (name: string, newMonsterHealth: number) => void;
+    onRemoveMonster: (name: string) => void;
+    monster: IMonster;
+}
+
+const MonsterCard = ({ onSave, onRemoveMonster, monster }: IMonsterCard) => {
+    const [editMode, setEditMode] = useState(false);
+    const [newMonsterHealth, setNewMonsterHealth] = useState(0);
+
+    const onInternalSave = () => {
+        onSave(monster.name, newMonsterHealth);
+        setEditMode(false);
+    };
+
+    const editOrSaveIcon = () => {
+        if (editMode) {
+            return (
+                <FontAwesomeIcon
+                    onClick={onInternalSave}
+                    icon={faFloppyDisk}
+                    className="edit_icon"
+                />
+            );
+        }
+        return (
+            <FontAwesomeIcon
+                onClick={() => setEditMode(true)}
+                icon={faPenToSquare}
+                className="edit_icon"
+            />
+        );
+    };
+    const switchHpElement = (health: number) => {
+        if (editMode) {
+            return (
+                <div className="edit_health_container">
+                    <Text text={"HP: "} />
+                    <input
+                        className="edit_health_input"
+                        type="number"
+                        value={newMonsterHealth}
+                        onChange={(e) =>
+                            setNewMonsterHealth(parseInt(e.target.value))
+                        }
+                    />
+                </div>
+            );
+        }
+        return <Text text={`HP: ${health.toString()}`} />;
+    };
+    return (
+        <div className="monster_container">
+            <Text text={monster.name} />
+            {switchHpElement(monster.health)}
+            {editOrSaveIcon()}
+            <div className="remove_icon_container">
+                <FontAwesomeIcon
+                    onClick={() => onRemoveMonster(monster.name)}
+                    icon={faXmark}
+                    className="remove_icon"
+                />
             </div>
         </div>
     );
