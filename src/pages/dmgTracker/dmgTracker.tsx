@@ -1,7 +1,11 @@
 import { useState } from "react";
 import "./dmgTracker.less";
 import { List } from "immutable";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+    faXmark,
+    faPenToSquare,
+    faFloppyDisk,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Text } from "../../components/text/Text";
 
@@ -13,6 +17,8 @@ export interface IMonster {
 export const DmgTracker = () => {
     const [monsterName, setMonsterName] = useState("");
     const [monsterHealth, setMonsterHealth] = useState(0);
+    const [newMonsterHealth, setNewMonsterHealth] = useState(0);
+    const [editMode, setEditMode] = useState(false);
 
     const [monsters, setMonsters] = useState<List<IMonster>>(List());
 
@@ -35,6 +41,54 @@ export const DmgTracker = () => {
         setMonsters(tempList);
     };
 
+    const switchHpElement = (health: number) => {
+        if (editMode) {
+            return (
+                <input
+                    type="number"
+                    value={newMonsterHealth}
+                    onChange={(e) =>
+                        setNewMonsterHealth(parseInt(e.target.value))
+                    }
+                />
+            );
+        }
+        return <Text text={`HP: ${health.toString()}`} />;
+    };
+
+    const onSave = (name: string) => {
+        const index = monsters.findIndex((monster) => monster.name === name);
+        const monster = monsters.get(index);
+        if (monster) {
+            const newMonster: IMonster = {
+                name: name,
+                health: newMonsterHealth,
+            };
+            let tempList = monsters.update(index, () => newMonster);
+            setMonsters(tempList);
+        }
+        setEditMode(false);
+    };
+
+    const editOrSaveIcon = (name: string) => {
+        if (editMode) {
+            return (
+                <FontAwesomeIcon
+                    onClick={() => onSave(name)}
+                    icon={faFloppyDisk}
+                    className="edit_icon"
+                />
+            );
+        }
+        return (
+            <FontAwesomeIcon
+                onClick={() => setEditMode(true)}
+                icon={faPenToSquare}
+                className="edit_icon"
+            />
+        );
+    };
+
     return (
         <div className="main_container">
             <div className="add_monster_container">
@@ -54,27 +108,24 @@ export const DmgTracker = () => {
                 <button onClick={addMonster}>Add Monster</button>
             </div>
             <div className="monsters_container">
-                <ol className="monsters_container_list">
-                    {monsters.map((monster, i) => {
-                        return (
-                            <li key={i}>
-                                <div className="monster_container">
-                                    <Text text={monster.name} />
-                                    <Text
-                                        text={`HP: ${monster.health.toString()}`}
-                                    />
-                                    <FontAwesomeIcon
-                                        onClick={() =>
-                                            onRemoveMonster(monster.name)
-                                        }
-                                        icon={faXmark}
-                                        className="close_icon"
-                                    />
-                                </div>
-                            </li>
-                        );
-                    })}
-                </ol>
+                {monsters.map((monster, i) => {
+                    return (
+                        <div key={i} className="monster_container">
+                            <Text text={monster.name} />
+                            {switchHpElement(monster.health)}
+                            {editOrSaveIcon(monster.name)}
+                            <div className="remove_icon_container">
+                                <FontAwesomeIcon
+                                    onClick={() =>
+                                        onRemoveMonster(monster.name)
+                                    }
+                                    icon={faXmark}
+                                    className="remove_icon"
+                                />
+                            </div>
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );
