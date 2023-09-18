@@ -35,29 +35,39 @@
             gap: 10px;
             border: 1px solid #774d00;
             border-radius: 5px;
-        }
 
-        .remove_icon_container {
-            height: 100%;
-            display: flex;
-            justify-content: flex-end;
-            align-items: flex-start;
-                
-            .remove_icon {
-                color: #c90000;
-                cursor: pointer;
-                &:hover {
-                    color: #610000;
+            .edit_health_container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 5px;
+                .edit_health_input {
+                    width: 35px;
                 }
             }
-        }
-                
-        .edit_icon {
-            color: #007a00;
-            cursor: pointer;
-            &:hover {
-                color: #005500;
+            
+            .remove_icon_container {
+                height: 100%;
+                display: flex;
+                justify-content: flex-end;
+                align-items: flex-start;
+            
+                .remove_icon {
+                    color: #c90000;
+                    cursor: pointer;
+                    &:hover {
+                        color: #610000;
+                    }
+                }
             }
-        }   
+        
+            .edit_icon {
+                color: #007a00;
+                cursor: pointer;
+                &:hover {
+                    color: #005500;
+                }
+            }   
+        }
     }
 }

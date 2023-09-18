@@ -44,13 +44,17 @@ export const DmgTracker = () => {
     const switchHpElement = (health: number) => {
         if (editMode) {
             return (
-                <input
-                    type="number"
-                    value={newMonsterHealth}
-                    onChange={(e) =>
-                        setNewMonsterHealth(parseInt(e.target.value))
-                    }
-                />
+                <div className="edit_health_container">
+                    <Text text={"HP: "} />
+                    <input
+                        className="edit_health_input"
+                        type="number"
+                        value={newMonsterHealth}
+                        onChange={(e) =>
+                            setNewMonsterHealth(parseInt(e.target.value))
+                        }
+                    />
+                </div>
             );
         }
         return <Text text={`HP: ${health.toString()}`} />;
